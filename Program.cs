@@ -17,8 +17,13 @@ namespace TestHostForCastException
                 .Options;
 
             var context = new TestDataContext(options);
-            //context.Set<Employee>().ToList();
-            //context.Set<EmployeeDevice>().ToList();
+
+            var employees = context.Set<Employee>();
+
+            var qualified = employees.Select(s => new { s.Id, IsQualified = true });
+            var unQualified = employees.Select(s => new { s.Id, IsQualified = false });
+
+            qualified.Union(unQualified).ToList();
         }
     }
 }
