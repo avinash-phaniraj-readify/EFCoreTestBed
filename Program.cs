@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using System;
 using System.Data.SqlServerCe;
 using System.Linq;
 
@@ -21,7 +22,13 @@ namespace TestHostForCastException
 
             var context = new HierarchyTestDataContext(options);
 
+            Console.WriteLine("Generated Sql query with casting:");
             var dogNamedWoof = context.Set<Animal>().Where(x => x is Dog && ((Dog)x).Name == "Woof").ToList();
+
+            Console.WriteLine("\nGenerated Sql query with as operator:");
+            dogNamedWoof = context.Set<Animal>().Where(x => x is Dog && (x as Dog).Name == "Woof").ToList();
+
+            Console.ReadKey();
         }
 
         private static readonly LoggerFactory MyLoggerFactory = new LoggerFactory(
