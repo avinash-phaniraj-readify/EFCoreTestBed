@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Data.SqlServerCe;
 using System.Linq;
 
@@ -8,17 +9,36 @@ namespace TestHostForCastException
     {
         static void Main(string[] args)
         {
-            var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
-            var ceConnection = new SqlCeConnection(ceConnectionString);
-            ceConnection.Open();
+            try
+            {
+                var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
+                var ceConnection = new SqlCeConnection(ceConnectionString);
+                ceConnection.Open();
 
-            var options = new DbContextOptionsBuilder<TestDataContext>()
-                .UseSqlCe(ceConnection)
-                .Options;
+                var options = new DbContextOptionsBuilder<TestDataContext>()
+                    .UseSqlCe(ceConnection)
+                    .Options;
 
-            var context = new TestDataContext(options);
-            //context.Set<Employee>().ToList();
-            //context.Set<EmployeeDevice>().ToList();
+                var context = new TestDataContext(options);
+
+                //this works.
+                var employeeDtos = (from device in context.Set<EmployeeDevice>()
+                                    select new EmployeeDto
+                                    {
+                                        Id = device.Employee.Id,
+                                        Name = device.Employee.Name
+                                    }).ToList();
+
+                //this fails.
+                employeeDtos = (from device in context.Set<EmployeeDevice>()
+                                select DtoFactory.CreateEmployeeDto(device)).ToList();
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            Console.ReadKey();
         }
     }
 }

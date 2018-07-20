@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,10 +7,7 @@ namespace TestHostForCastException
 {
     public class TestDataContext : DbContext
     {
-        public TestDataContext(DbContextOptions options) : base(options)
-        {
-
-        }
+        public TestDataContext(DbContextOptions options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -27,6 +25,7 @@ namespace TestHostForCastException
     {
         string Name { get; set; }
     }
+
     public class Employee : IEmployee
     {
         [Key]
@@ -37,11 +36,30 @@ namespace TestHostForCastException
 
     public class EmployeeDevice
     {
+        protected ILazyLoader _lazyLoader;
+
+        public EmployeeDevice(ILazyLoader lazyLoader)
+        {
+            _lazyLoader = lazyLoader;
+        }
+
         [Key]
         public int Id { get; set; }
         public int EmployeeId { get; set; }
         public string Device { get; set; }
-        public Employee Employee { get; set; }
-    }
 
+        private Employee _employee;
+        public Employee Employee
+        {
+            get
+            {
+                _lazyLoader?.Load(this, nameof(Employee));
+                return _employee;
+            }
+            set
+            {
+                _employee = value;
+            }
+        }
+    }
 }
