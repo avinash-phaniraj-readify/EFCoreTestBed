@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -29,10 +30,26 @@ namespace TestHostForCastException
     }
     public class Employee : IEmployee
     {
+        private readonly ILazyLoader _lazyLoader;
+
+        public Employee(ILazyLoader lazyLoader)
+        {
+            this._lazyLoader = lazyLoader;
+            this._devices = new List<EmployeeDevice>();
+        }
+
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<EmployeeDevice> Devices { get; set; }
+
+        private ICollection<EmployeeDevice> _devices;
+        public ICollection<EmployeeDevice> Devices {
+            get
+            {
+                _lazyLoader.Load(this, nameof(Devices));
+                return _devices;
+            }
+        }
     }
 
     public class EmployeeDevice
