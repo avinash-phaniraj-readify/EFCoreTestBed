@@ -6,13 +6,13 @@ using System.Data.SqlClient;
 using System.Data.SqlServerCe;
 using System.Linq;
 
-namespace TestHostForCastException
+namespace TestHost
 {
     class Program
     {
         static void Main(string[] args)
         {
-            var ceConnectionString = "data source=.;initial catalog=TestingDataBase;integrated security=True;MultipleActiveResultSets=True;";
+            var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
             var ceConnection = new SqlCeConnection(ceConnectionString);
 
 
@@ -20,45 +20,53 @@ namespace TestHostForCastException
                 .UseSqlCe(ceConnection);
 
             Func<DbContextOptionsBuilder, DbContextOptionsBuilder> configureOptions = (c) => c.UseLoggerFactory(new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) }));
-
+            options.EnableSensitiveDataLogging();
 
             options = configureOptions(options);
 
-            using (var context = new TestDataContext(options.Options))
+            using (var dc = new TestDataContext(options.Options))
             {
-                var assetQuery = from asset in context.Assets.OfType<Product>()
-                                 where asset.TaxCategory.SerialCategory.GetValueOrDefault() != (int)ProvicerTypes.Small
-                                 select asset;
+           
+                var driverQuery =
+                    from bel in dc.Drivers
+                    where bel.YearsOfExperience.GetValueOrDefault() > 1
+                    select bel;
 
-                var productInfo = from  provider in context.Providers 
-                                  join  l in assetQuery on provider.Id equals l.ProviderId
-                                  select provider;
+                var driverTruckInfoQuery = from truck in dc.Trucks
+                               join l in driverQuery on truck.DriverId equals l.Truck.RecordId
+                               select new DriveTruckInfo
+                               {
+                                   DepartmentId = l.Department.RecordId,
+                                   DepartmentName = l.Department.Name,
+                                   TruckId = truck.RecordId,
+                                   TruckName = truck.Model,
+                                   DriverId = l.RecordId,
+                                   DriverName = l.Name
+                               };
 
-                var transactions = from transaction in context.Transactions
-                                   join l in productInfo on transaction.ProductId equals l.Id
-                                   let cache = l.TaxCategory.SerialCategory
-                                   select new EE
-                                   {
-                                       Total = transaction.TotalAmount,
-                                       Tax = (transaction.TotalAmount) * (l.TaxCategory.Percentage/100)
-                                   };
+                var rgttc = from trips in dc.Trips
+                            join drivertruckq in driverTruckInfoQuery on trips.DriverId equals drivertruckq.DriverId
+                            select new
+                            {
+                                TripId = trips.RecordId,
+                                TripSummary = string.Format($"Driver: {drivertruckq.DriverName}, Truck: {drivertruckq.TruckName}"),
+                                trips.TotalKilometers
+                            };
 
-                var s = transactions.ToList();
+                var itemsList = rgttc.ToList();
 
-                }
+                Console.ReadLine();
+            }
         }
-
-        public enum ProvicerTypes
-        {
-            Large = 1,
-            Small = 0
-        }
-
     }
-    
-    public class EE
+
+    public class DriveTruckInfo
     {
-        public decimal Tax { get; set; }
-        public decimal Total { get; set; }
+        public int DriverId { get; set; }
+        public string DriverName { get; set; }
+        public int TruckId { get; set; }
+        public string TruckName { get; set; }
+        public int DepartmentId { get; set; }
+        public string DepartmentName { get; set; }
     }
 }

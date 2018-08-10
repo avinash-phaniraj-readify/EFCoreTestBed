@@ -1,81 +1,79 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TestHostForCastException
+namespace TestHost
 {
     public class TestDataContext : DbContext
     {
-        public DbSet<Transaction> Transactions { get; set; }
-        public DbSet<Asset> Assets { get; set; }
-        public DbSet<Asset> Providers { get; set; }
+        public DbSet<Driver> Drivers { get; set; }
+        public DbSet<Truck> Trucks { get; set; }
+        public DbSet<Trip> Trips { get; set; }
 
         public TestDataContext(DbContextOptions options) : base(options)
         {
-            
+
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Asset>()
-           .HasDiscriminator<int>("AssetType")
-           .HasValue<Product>(1);
+            modelBuilder.Entity<Driver>()
+          .HasOne(a => a.Truck)
+          .WithOne(b => b.Driver)
+          .HasForeignKey<Truck>(b => b.DriverId);
         }
     }
 
-    [Table("Assets")]
-    public abstract class Asset
+    
+    [Table("Drivers")]
+    public class Driver 
     {
         [Key]
-        public int Id { get; set; }
+        public int RecordId { get; set; }
+        public Truck Truck { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public int DepartmentId { get; set; }
+        public Department Department { get; set; }
 
-        public int AssetType { get; set; }
-        public int ProviderId { get; set; }
-        public TaxCategory TaxCategory { get; set; }
+        public int? YearsOfExperience { get; set; }
     }
 
-    public class Product : Asset
+    [Table("Trucks")]
+    public class Truck
     {
-        public decimal Price { get; set; }
+        [Key]
+        public int RecordId { get; set; }
+        public string Model { get; set; }
+        public string Manufacturer { get; set; }
+        public string Color { get; set; }
+
+        public int DriverId { get; set; }
+        public Driver Driver { get; set; }
+
     }
 
-    [Table("Providers")]
-    public class Provider
+    [Table("Departments")]
+    public class Department
     {
-        public int Id { get; set; }
+        [Key]
+        public int RecordId { get; set; }
+
         public string Name { get; set; }
+
+        public string Address { get; set; }
     }
 
-    [Table("TaxCategories")]
-    public class TaxCategory
+    [Table("Trips")]
+    public class Trip
     {
         [Key]
-        public int Id { get; set; }
-
-        public string Code { get; set; }
-
-        public decimal Percentage { get; set; }
-
-        public int? SerialCategory { get; set; }
-    }
-
-    [Table("Transactions")]
-    public class Transaction
-    {
-        [Key]
-        public int Id { get; set; }
-
-        public int ProductId { get; set; }
-
-        public int Quantity { get; set; }
-
-        public decimal TotalAmount { get; set; }
-
+        public int RecordId { get; set; }
+        public Driver Driver { get; set; }
+        public int DriverId { get; set; }
+        public int TotalKilometers { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }
