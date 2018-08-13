@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFrameworkCore.SqlServerCompact35, Version=2.1.0.0, Culture=neutral, PublicKeyToken=9af395b34ac99006, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFrameworkCore.SqlServerCompact35.2.1.0.1\lib\net461\EntityFrameworkCore.SqlServerCompact35.dll</HintPath>
+      <HintPath>packages\EntityFrameworkCore.SqlServerCompact35.2.1.0.2\lib\net461\EntityFrameworkCore.SqlServerCompact35.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.EntityFrameworkCore, Version=2.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.EntityFrameworkCore.2.1.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.dll</HintPath>

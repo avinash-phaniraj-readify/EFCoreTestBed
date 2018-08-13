@@ -33,7 +33,7 @@ namespace TestHost
                     select bel;
 
                 var driverTruckInfoQuery = from truck in dc.Trucks
-                               join l in driverQuery on truck.DriverId equals l.Truck.RecordId
+                               join l in driverQuery on truck.DriverId equals l.RecordId
                                select new DriveTruckInfo
                                {
                                    DepartmentId = l.Department.RecordId,
