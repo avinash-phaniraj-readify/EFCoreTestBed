@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using System;
-using System.Data.SqlClient;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Configuration;
+using System.Data;
 using System.Data.SqlServerCe;
 using System.Linq;
 
@@ -12,7 +15,8 @@ namespace TestHost
     {
         static void Main(string[] args)
         {
-            var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
+
+            var ceConnectionString = ConfigurationManager.AppSettings["SqlCeConnection"];
             var ceConnection = new SqlCeConnection(ceConnectionString);
 
 
@@ -24,49 +28,57 @@ namespace TestHost
 
             options = configureOptions(options);
 
-            using (var dc = new TestDataContext(options.Options))
+            using (var dc = new SampleDataContext(options.Options))
             {
-           
-                var driverQuery =
-                    from bel in dc.Drivers
-                    where bel.YearsOfExperience.GetValueOrDefault() > 1
-                    select bel;
+                decimal amount = (from employees in dc.Employees select employees).Sum(p => p.Salary);
 
-                var driverTruckInfoQuery = from truck in dc.Trucks
-                               join l in driverQuery on truck.DriverId equals l.RecordId
-                               select new DriveTruckInfo
-                               {
-                                   DepartmentId = l.Department.RecordId,
-                                   DepartmentName = l.Department.Name,
-                                   TruckId = truck.RecordId,
-                                   TruckName = truck.Model,
-                                   DriverId = l.RecordId,
-                                   DriverName = l.Name
-                               };
+                var payrollView = dc.Payrolls
+                    .Select(p => new
+                    {
+                        PayRollId = p.RecordId,
+                        PayrollDate = p.Date,
+                        PayrollTaxRate = p.TaxRate,
+                        TotalWages = amount
+                    });
 
-                var rgttc = from trips in dc.Trips
-                            join drivertruckq in driverTruckInfoQuery on trips.DriverId equals drivertruckq.DriverId
-                            select new
-                            {
-                                TripId = trips.RecordId,
-                                TripSummary = string.Format($"Driver: {drivertruckq.DriverName}, Truck: {drivertruckq.TruckName}"),
-                                trips.TotalKilometers
-                            };
-
-                var itemsList = rgttc.ToList();
+                var itemsList = payrollView.ToList();
 
                 Console.ReadLine();
             }
         }
     }
 
-    public class DriveTruckInfo
+    public class SampleDataContext : DbContext
     {
-        public int DriverId { get; set; }
-        public string DriverName { get; set; }
-        public int TruckId { get; set; }
-        public string TruckName { get; set; }
-        public int DepartmentId { get; set; }
-        public string DepartmentName { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Payroll> Payrolls { get; set; }
+
+        public SampleDataContext(DbContextOptions options) : base(options)
+        {
+
+        }
     }
+
+    [Table("Employees")]
+    public class Employee
+    {
+        [Key]
+        public int RecordId { get; set; }
+
+        public string Name { get; set; }
+
+        public decimal Salary { get; set; }
+    }
+
+    [Table("Payrolls")]
+    public class Payroll
+    {
+        [Key]
+        public int RecordId { get; set; }
+
+        public DateTime Date { get; set; }
+
+        public float TaxRate { get; set; }
+    }
+
 }
