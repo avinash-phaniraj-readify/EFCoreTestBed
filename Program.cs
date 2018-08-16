@@ -17,8 +17,25 @@ namespace TestHostForCastException
                 .Options;
 
             var context = new TestDataContext(options);
-            //context.Set<Employee>().ToList();
-            //context.Set<EmployeeDevice>().ToList();
+            var es = context.Set<Employee>();
+            var ds = context.Set<EmployeeDevice>();
+
+            var q = (from e in es
+                join d in ds on e.Id equals d.EmployeeId into x
+                from j in x.DefaultIfEmpty()
+                select new Holder
+                {
+                    Name = e.Name,
+                    DeviceId = j.DeviceId //(short?)
+                }).ToList();
+
         }
+    }
+
+
+    public class Holder
+    {
+        public string Name { get; set; }
+        public int? DeviceId { get; set; }
     }
 }

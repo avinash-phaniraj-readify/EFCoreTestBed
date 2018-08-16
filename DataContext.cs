@@ -39,6 +39,7 @@ namespace TestHostForCastException
     {
         [Key]
         public int Id { get; set; }
+        public short DeviceId { get; set; }
         public int EmployeeId { get; set; }
         public string Device { get; set; }
         public Employee Employee { get; set; }
