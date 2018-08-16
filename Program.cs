@@ -28,10 +28,8 @@ namespace TestHostForCastException
                     Name = e.Name,
                     DeviceId = j.DeviceId //(short?)
                 }).ToList();
-
         }
     }
-
 
     public class Holder
     {
