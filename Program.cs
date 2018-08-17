@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Data.SqlServerCe;
 using System.Linq;
 
@@ -8,8 +9,7 @@ namespace TestHostForCastException
     {
         static void Main(string[] args)
         {
-            var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
-            var ceConnection = new SqlCeConnection(ceConnectionString);
+            var ceConnection = new SqlCeConnection("Data Source=TestDb.sdf; Persist Security Info=False;");
             ceConnection.Open();
 
             var options = new DbContextOptionsBuilder<TestDataContext>()
@@ -17,23 +17,12 @@ namespace TestHostForCastException
                 .Options;
 
             var context = new TestDataContext(options);
-            var es = context.Set<Employee>();
             var ds = context.Set<EmployeeDevice>();
 
-            var q = (from e in es
-                join d in ds on e.Id equals d.EmployeeId into x
-                from j in x.DefaultIfEmpty()
-                select new Holder
-                {
-                    Name = e.Name,
-                    DeviceId = j.DeviceId //(short?)
-                }).ToList();
-        }
-    }
+            var currentDate = DateTime.Now;
 
-    public class Holder
-    {
-        public string Name { get; set; }
-        public int? DeviceId { get; set; }
+            var q = (from d in ds
+                     select (d.ExpiryDate.Value - currentDate).Days).ToList();
+        }
     }
 }

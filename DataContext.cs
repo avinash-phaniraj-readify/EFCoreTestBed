@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -43,6 +44,7 @@ namespace TestHostForCastException
         public int EmployeeId { get; set; }
         public string Device { get; set; }
         public Employee Employee { get; set; }
+        public DateTime? ExpiryDate { get; set; }
     }
 
 }
