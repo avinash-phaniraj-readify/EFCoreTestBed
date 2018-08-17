@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestHostForCastException
 {
@@ -32,6 +34,10 @@ namespace TestHostForCastException
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
+
+        [NotMapped]
+        public DateTime? YoDate { get; set; }
+
         public ICollection<EmployeeDevice> Devices { get; set; }
     }
 
@@ -39,8 +45,7 @@ namespace TestHostForCastException
     {
         [Key]
         public int Id { get; set; }
-        public short DeviceId { get; set; }
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         public string Device { get; set; }
         public Employee Employee { get; set; }
     }
