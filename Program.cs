@@ -39,18 +39,18 @@ namespace TestHostForCastException
 
         private static TestDataContext GetContext()
         {
-            //var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
-            //var ceConnection = new SqlCeConnection(ceConnectionString);
-            //ceConnection.Open();
+            var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
+            var ceConnection = new SqlCeConnection(ceConnectionString);
+            ceConnection.Open();
 
-            var sqlConnectionString = "Server=localhost;Database=FruitCake;Trusted_Connection=True;";
-            var sqlConnection = new SqlConnection(sqlConnectionString);
-            sqlConnection.Open();
+            //var sqlConnectionString = "Server=localhost;Database=FruitCake;Trusted_Connection=True;";
+            //var sqlConnection = new SqlConnection(sqlConnectionString);
+            //sqlConnection.Open();
 
             var options = new DbContextOptionsBuilder<TestDataContext>()
                 .UseLoggerFactory(WithDebugLogger)
-                //.UseSqlCe(ceConnection)
-                .UseSqlServer(sqlConnection)
+                .UseSqlCe(ceConnection)
+                //.UseSqlServer(sqlConnection)
                 .Options;
 
             return new TestDataContext(options);
