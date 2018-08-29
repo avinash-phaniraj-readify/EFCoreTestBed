@@ -20,13 +20,14 @@ namespace TestHostForCastException
 
     }
 
+    [Table("Account")]
     public class Account
     {
         [Key]
         public int Id { get; set; }
         public bool IsCredit { get; set; }
         public int Type { get; set; }
-        public decimal Amount { get; set; }
+        public double Amount { get; set; }
         public string ACNumber { get; set; }
     }
 }
