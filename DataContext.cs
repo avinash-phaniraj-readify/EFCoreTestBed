@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace TestHostForCastException
 {
@@ -11,37 +16,17 @@ namespace TestHostForCastException
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<EmployeeDevice>()
-                .HasOne<Employee>(a => a.Employee)
-                .WithMany(p => p.Devices)
-                .HasForeignKey(a => a.EmployeeId)
-                .IsRequired(true);
+        public DbSet<Account> Accounts  { get; set; }
 
-            base.OnModelCreating(modelBuilder);
-        }
     }
 
-    public interface IEmployee
-    {
-        string Name { get; set; }
-    }
-    public class Employee : IEmployee
+    public class Account
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public ICollection<EmployeeDevice> Devices { get; set; }
+        public bool IsCredit { get; set; }
+        public int Type { get; set; }
+        public decimal Amount { get; set; }
+        public string ACNumber { get; set; }
     }
-
-    public class EmployeeDevice
-    {
-        [Key]
-        public int Id { get; set; }
-        public int EmployeeId { get; set; }
-        public string Device { get; set; }
-        public Employee Employee { get; set; }
-    }
-
 }
