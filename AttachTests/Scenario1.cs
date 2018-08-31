@@ -10,6 +10,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.AttachTests
     {
         public Scenario1(DatabaseFixture fixture): base(fixture)
         {
+
         }
 
         [Fact]
@@ -58,7 +59,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.AttachTests
                 //delete duplicate child entity
                 context.Remove(ed11);
 
-                //works!
+                //Bhoom!!!
                 context.SaveChanges();
             });
         }

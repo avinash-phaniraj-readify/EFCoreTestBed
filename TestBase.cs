@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using System;
+using System.Data;
 using System.Text;
 using Xunit;
 
@@ -58,6 +59,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
                 transaction.Rollback();
             }
         }
+
+        protected IDbConnection Connection => fixture.Connection;
     }
 
     class DebugTextWriter : System.IO.TextWriter

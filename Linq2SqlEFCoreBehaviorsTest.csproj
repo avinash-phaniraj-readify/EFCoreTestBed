@@ -38,6 +38,9 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=1.50.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Dapper.1.50.5\lib\net451\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFrameworkCore.SqlServerCompact35, Version=2.1.0.0, Culture=neutral, PublicKeyToken=9af395b34ac99006, processorArchitecture=MSIL">
       <HintPath>packages\EntityFrameworkCore.SqlServerCompact35.2.1.0.4\lib\net461\EntityFrameworkCore.SqlServerCompact35.dll</HintPath>
     </Reference>
@@ -149,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttachTests\Scenario1.cs" />
+    <Compile Include="AttachTests\Scenario2.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="DatabaseFixture.cs" />
     <Compile Include="EFCore\DataContext.cs" />
@@ -166,7 +170,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
