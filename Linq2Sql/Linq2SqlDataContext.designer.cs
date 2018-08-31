@@ -113,7 +113,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck = UpdateCheck.Never)]
 		public int Id
 		{
 			get
@@ -133,7 +133,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false, UpdateCheck = UpdateCheck.Never)]
 		public string Name
 		{
 			get
@@ -231,7 +231,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck = UpdateCheck.Never)]
 		public int Id
 		{
 			get
@@ -251,7 +251,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_EmployeeId", DbType="Int NOT NULL", UpdateCheck = UpdateCheck.Never)]
 		public int EmployeeId
 		{
 			get
@@ -275,7 +275,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Device", DbType="NVarChar(10) NOT NULL", CanBeNull=false)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Device", DbType="NVarChar(10) NOT NULL", CanBeNull=false, UpdateCheck = UpdateCheck.Never)]
 		public string Device
 		{
 			get
