@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TestHostForCastException
+namespace Linq2SqlEFCoreBehaviorsTest.EFCore
 {
-    public class TestDataContext : DbContext
+    public class EFCoreDataContext : DbContext
     {
-        public TestDataContext(DbContextOptions options) : base(options)
+        public EFCoreDataContext(DbContextOptions options) : base(options)
         {
 
         }
@@ -25,11 +25,8 @@ namespace TestHostForCastException
         }
     }
 
-    public interface IEmployee
-    {
-        string Name { get; set; }
-    }
-    public class Employee : IEmployee
+  
+    public partial class Employee 
     {
         [Key]
         public int Id { get; set; }
@@ -41,7 +38,7 @@ namespace TestHostForCastException
         public ICollection<EmployeeDevice> Devices { get; set; }
     }
 
-    public class EmployeeDevice
+    public partial class EmployeeDevice
     {
         [Key]
         public int Id { get; set; }

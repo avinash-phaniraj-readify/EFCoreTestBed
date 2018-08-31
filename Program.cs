@@ -13,15 +13,16 @@ namespace TestHostForCastException
     {
         static void Main(string[] args)
         {
+            /*
             var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
             var ceConnection = new SqlCeConnection(ceConnectionString);
             ceConnection.Open();
             
-            var options = new DbContextOptionsBuilder<TestDataContext>()
+            var options = new DbContextOptionsBuilder<EFCoreDataContext>()
                 .UseSqlCe(ceConnection)
                 .Options;
 
-            var context = new TestDataContext(options);
+            var context = new EFCoreDataContext(options);
             var employees = context.Set<Employee>();
             var employeeDevices = context.Set<EmployeeDevice>();
 
@@ -38,6 +39,7 @@ namespace TestHostForCastException
             Debug.Assert(q[1].Result == "Was Not Zero");
             Debug.Assert(q[2].Result == "Was Not Zero");
             Debug.Assert(q[3].Result == "Was Zero"); // fails - is actually null
+            */
         }
     }
 }
