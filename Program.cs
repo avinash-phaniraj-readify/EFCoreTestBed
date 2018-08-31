@@ -1,13 +1,4 @@
-﻿using System;
-using System.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
-using System.Data.SqlServerCe;
-using System.Diagnostics;
-using System.Linq;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Debug;
-
-namespace TestHostForCastException
+﻿namespace TestHostForCastException
 {
     class Program
     {

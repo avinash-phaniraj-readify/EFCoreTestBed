@@ -28,6 +28,11 @@ namespace Linq2SqlEFCoreBehaviorsTest.EFCore
   
     public partial class Employee 
     {
+        public Employee()
+        {
+            Devices = new HashSet<EmployeeDevice>();
+        }
+
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
