@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Text;
 using Xunit;
 
 namespace Linq2SqlEFCoreBehaviorsTest
@@ -22,7 +23,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
             {
                 using (var context = new Linq2Sql.Linq2SqlDataContext(connection))
                 {
-                    context.Log = Console.Out;
+                    
+                    context.Log = new DebugTextWriter();
                     action(context);
                 }
             }
@@ -51,5 +53,19 @@ namespace Linq2SqlEFCoreBehaviorsTest
                 transaction.Rollback();
             }
         }
+    }
+
+    class DebugTextWriter : System.IO.TextWriter
+    {
+        public override void Write(char[] buffer, int index, int count)
+        {
+            System.Diagnostics.Debug.Write(new String(buffer, index, count));
+        }
+
+        public override void Write(string value)
+        {
+            System.Diagnostics.Debug.Write(value);
+        }
+        public override Encoding Encoding => System.Text.Encoding.Default;
     }
 }
