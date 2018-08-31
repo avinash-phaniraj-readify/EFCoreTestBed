@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Debug;
 using System;
 using System.Text;
 using Xunit;
@@ -9,6 +11,7 @@ namespace Linq2SqlEFCoreBehaviorsTest
     public class TestBase
     {
         DatabaseFixture fixture;
+        public static readonly LoggerFactory MyLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider((_, __) => true) });
 
         public TestBase(DatabaseFixture fixture)
         {
@@ -39,6 +42,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
             var connection = this.fixture.Connection;
             var transaction = connection.BeginTransaction();
             var options = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
+            .EnableSensitiveDataLogging(true)
+            .UseLoggerFactory(MyLoggerFactory)
             .UseSqlCe(connection)
             .Options;
             try
@@ -68,4 +73,6 @@ namespace Linq2SqlEFCoreBehaviorsTest
         }
         public override Encoding Encoding => System.Text.Encoding.Default;
     }
+
+    
 }

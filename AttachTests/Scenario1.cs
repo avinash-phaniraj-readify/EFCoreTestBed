@@ -53,7 +53,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.AttachTests
                 //attach duplicate child entity
 
                 var ex = Assert.Throws<InvalidOperationException>(() => context.Attach(ed11));
-                Assert.Equal("The instance of entity type 'EmployeeDevice' cannot be tracked because another instance with the same key value for {'Id'} is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached. Consider using 'DbContextOptionsBuilder.EnableSensitiveDataLogging' to see the conflicting key values.", ex.Message);
+                Assert.Equal("The instance of entity type 'EmployeeDevice' cannot be tracked because another instance with the key value '{Id: 2}' is already being tracked. When attaching existing entities, ensure that only one entity instance with a given key value is attached.", ex.Message);
 
                 //delete duplicate child entity
                 context.Remove(ed11);
