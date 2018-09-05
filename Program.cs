@@ -1,43 +1,61 @@
 ﻿using System;
-using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SqlServerCe;
-using System.Diagnostics;
 using System.Linq;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Debug;
 
-namespace TestHostForCastException
+namespace TestHost
 {
     class Program
     {
         static void Main(string[] args)
         {
             var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
+
+            SqlCeEngine engine = new SqlCeEngine(ceConnectionString);
+            engine.Upgrade(ceConnectionString);
+
             var ceConnection = new SqlCeConnection(ceConnectionString);
             ceConnection.Open();
-            
+
+
             var options = new DbContextOptionsBuilder<TestDataContext>()
                 .UseSqlCe(ceConnection)
+               
                 .Options;
 
-            var context = new TestDataContext(options);
-            var employees = context.Set<Employee>();
-            var employeeDevices = context.Set<EmployeeDevice>();
+            using (var dc = new TestDataContext(options))
+            {
+                var employee =
+                    (from emp in dc.Employee
+                    join dev in dc.EmployeeDevice
+                        on emp.Id equals dev.EmployeeId
+                    select new EmployeeInfo
+                    {
+                        EmployeeId = emp.Id,
+                        EmployeeName = emp.Name,
+                        Device = dev.Device,
 
-            var q = (
-                from e in employees
-                join d in employeeDevices on e.Id equals d.EmployeeId into x 
-                from j in x.DefaultIfEmpty()
-                select new 
-                {
-                    Result = j.Id != 0 ? "Was Not Zero" : "Was Zero"
-                }).ToList();
+                        //Expression evaluation caused an overflow. [ Name of function (if known) =  ]
+                        AverageSharePerYear = emp.YearsOfService == 0 ? 0 : (decimal)emp.NumberOfShare / (decimal)emp.YearsOfService
 
-            Debug.Assert(q[0].Result == "Was Not Zero");
-            Debug.Assert(q[1].Result == "Was Not Zero");
-            Debug.Assert(q[2].Result == "Was Not Zero");
-            Debug.Assert(q[3].Result == "Was Zero"); // fails - is actually null
+                        //An exception occurred while reading a database value.The expected type was 'System.Decimal' but the actual value was of type 'System.Int32'.'
+                        //AverageSharePerYear = emp.YearsOfService == 0 ? (decimal)emp.NumberOfShare  : (decimal)emp.NumberOfShare / (decimal)emp.YearsOfService
+
+                        //This works!!
+                        //AverageSharePerYear = emp.YearsOfService == 0 ? 0 : Convert.ToDecimal(emp.NumberOfShare) / Convert.ToDecimal(emp.YearsOfService)
+
+                    }).ToList();                              
+            }
+
+            Console.ReadLine();
+        }
+        public class EmployeeInfo
+        {
+            public int EmployeeId { get; set; }
+            public string EmployeeName { get; set; }
+            public decimal AverageSharePerYear { get; set; }
+            public string Device { get; set; }
         }
     }
 }

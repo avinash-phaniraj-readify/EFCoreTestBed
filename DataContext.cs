@@ -1,13 +1,15 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TestHostForCastException
+namespace TestHost
 {
     public class TestDataContext : DbContext
     {
+        public DbSet<Employee> Employee { get; set; }
+        public DbSet<EmployeeDevice> EmployeeDevice { get; set; }
+
+
         public TestDataContext(DbContextOptions options) : base(options)
         {
 
@@ -25,27 +27,22 @@ namespace TestHostForCastException
         }
     }
 
-    public interface IEmployee
-    {
-        string Name { get; set; }
-    }
-    public class Employee : IEmployee
+
+    public class Employee
     {
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-
-        [NotMapped]
-        public DateTime? YoDate { get; set; }
-
         public ICollection<EmployeeDevice> Devices { get; set; }
+        public int NumberOfShare { get; set; }
+        public int YearsOfService { get; set; }
     }
 
     public class EmployeeDevice
     {
         [Key]
         public int Id { get; set; }
-        public int? EmployeeId { get; set; }
+        public int EmployeeId { get; set; }
         public string Device { get; set; }
         public Employee Employee { get; set; }
     }
