@@ -22,15 +22,13 @@ namespace TestHostForCastException
             base.OnModelCreating(modelBuilder);
         }
     }
-
-    public interface IEmployee
-    {
-        string Name { get; set; }
-    }
-    public class Employee : IEmployee
+    
+    public class Employee 
     {
         [Key]
         public int Id { get; set; }
+
+        [StringLength(10)]
         public string Name { get; set; }
         public ICollection<EmployeeDevice> Devices { get; set; }
     }
