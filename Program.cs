@@ -22,10 +22,7 @@ namespace TestHostForCastException
         {
             var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
             var ceConnection = new SqlCeConnection(ceConnectionString);
-            SqlCeEngine s = new SqlCeEngine(ceConnectionString);
-            s.LocalConnectionString = ceConnectionString;
-            s.Upgrade(ceConnectionString);
-
+            
             ceConnection.Open();
 
             var options = new DbContextOptionsBuilder<TestDataContext>()
