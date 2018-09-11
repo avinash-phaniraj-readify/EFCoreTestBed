@@ -1,33 +1,56 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace TestHostForCastException
+namespace TestHost
 {
-    public class HierarchyTestDataContext : DbContext
+    public class TestDbContext : DbContext
     {
-        public HierarchyTestDataContext(DbContextOptions options) : base(options) { }
+        public TestDbContext(DbContextOptions options) : base(options)
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Animal>()
-                .HasDiscriminator<int>("AnimalType")
-                .HasValue<Animal>(1)
-                .HasValue<Cow>(2)
-                .HasValue<Dog>(3);
+            modelBuilder.Entity<EmployeeDevice>()
+                .HasOne(a => a.Employee)
+                .WithMany(p => p.Devices)
+                .HasForeignKey(a => a.EmployeeId)
+                .IsRequired(true);
 
             base.OnModelCreating(modelBuilder);
         }
     }
 
-    public class Animal
+    public interface IEmployee
+    {
+        string Name { get; set; }
+    }
+    public class Employee : IEmployee
     {
         [Key]
         public int Id { get; set; }
+
         public string Name { get; set; }
-        public int AnimalType { get; set; }
+
+        public ICollection<EmployeeDevice> Devices { get; set; }
     }
 
-    public class Cow : Animal { }
+    public class EmployeeDevice
+    {
+        [Key]
+        public int Id { get; set; }
 
-    public class Dog : Animal { }
+        public short DeviceId { get; set; }
+
+        public int EmployeeId { get; set; }
+
+        public string Device { get; set; }
+
+        public Employee Employee { get; set; }
+
+        public DateTime? ExpiryDate { get; set; }
+    }
 }
