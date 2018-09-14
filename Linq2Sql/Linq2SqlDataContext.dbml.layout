@@ -21,5 +21,18 @@
         <classShapeMoniker Id="f18af2a1-57ca-4a39-b49d-c46e9140d810" />
       </nodes>
     </associationConnector>
+    <classShape Id="fabba5e9-6233-4761-ab1b-63cfb542d874" absoluteBounds="5.75, 4.875, 2, 1.3862939453125">
+      <DataClassMoniker Name="/Linq2SqlDataContext/EmployeeDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7824b7e8-437c-412d-95fc-7d44c922044b" absoluteBounds="5.765, 5.335, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(2.875 : 2.84699625651042); (6.75 : 2.84699625651042); (6.75 : 4.875)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/Linq2SqlDataContext/Employee/Employee_EmployeeDetail" />
+      <nodes>
+        <classShapeMoniker Id="4920f12c-82aa-4a24-aaa9-ae2e89949ad2" />
+        <classShapeMoniker Id="fabba5e9-6233-4761-ab1b-63cfb542d874" />
+      </nodes>
+    </associationConnector>
   </nestedChildShapes>
 </ordesignerObjectsDiagram>

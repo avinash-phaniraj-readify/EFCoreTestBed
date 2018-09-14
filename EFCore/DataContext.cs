@@ -21,6 +21,12 @@ namespace Linq2SqlEFCoreBehaviorsTest.EFCore
                 .HasForeignKey(a => a.EmployeeId)
                 .IsRequired(true);
 
+            modelBuilder.Entity<EmployeeDetails>()
+                .HasOne<Employee>(a => a.Employee)
+                .WithOne(p => p.EmployeeDetails)
+                .HasForeignKey<EmployeeDetails>(a=> a.EmployeeId)
+                .IsRequired(true);
+
             base.OnModelCreating(modelBuilder);
         }
     }
@@ -40,6 +46,8 @@ namespace Linq2SqlEFCoreBehaviorsTest.EFCore
         [NotMapped]
         public DateTime? YoDate { get; set; }
 
+        public EmployeeDetails EmployeeDetails { get; set; }
+
         public ICollection<EmployeeDevice> Devices { get; set; }
     }
 
@@ -47,9 +55,19 @@ namespace Linq2SqlEFCoreBehaviorsTest.EFCore
     {
         [Key]
         public int Id { get; set; }
-        public int? EmployeeId { get; set; }
+        public int EmployeeId { get; set; }
         public string Device { get; set; }
         public Employee Employee { get; set; }
+    }
+
+
+    public partial class EmployeeDetails
+    {
+        [Key]
+        public int Id { get; set; }
+        public int EmployeeId { get; set; }
+        public Employee Employee { get; set; }
+        public string Details { get; set; }
     }
 
 }

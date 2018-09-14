@@ -155,6 +155,8 @@
     <Compile Include="AttachTests\Scenario2.cs" />
     <Compile Include="AttachTests\Scenario3.cs" />
     <Compile Include="AttachTests\Scenario4.cs" />
+    <Compile Include="MiscTests\NullableTypeInConstructor.cs" />
+    <Compile Include="MiscTests\QueryableInSelectTest.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="DatabaseFixture.cs" />
     <Compile Include="EFCore\DataContext.cs" />
