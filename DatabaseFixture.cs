@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data.Common;
 using System.Data.SqlServerCe;
+using System.Data.SqlClient;
 using System.IO;
 using Xunit;
 
@@ -8,7 +10,7 @@ namespace Linq2SqlEFCoreBehaviorsTest
     public class DatabaseFixture : IDisposable
     {
         private string databaseFilePath;
-        private SqlCeConnection connection;
+        private DbConnection connection;
 
         public DatabaseFixture()
         {
@@ -19,10 +21,11 @@ namespace Linq2SqlEFCoreBehaviorsTest
             {
                 dbStream.CopyTo(fileStream);
             }
-            connection = GetConnection();
+            //connection = GetCeConnection();
+            connection = GetSqlConnection();
         }
 
-        public SqlCeConnection Connection => connection;
+        public DbConnection Connection => connection;
 
         public void Dispose()
         {
@@ -30,12 +33,20 @@ namespace Linq2SqlEFCoreBehaviorsTest
             File.Delete(databaseFilePath);
         }
 
-        private SqlCeConnection GetConnection()
+        private SqlCeConnection GetCeConnection()
         {
             var ceConnectionString = $"Data Source={databaseFilePath}; Persist Security Info = False; ";
             var ceConnection = new SqlCeConnection(ceConnectionString);
             ceConnection.Open();
             return ceConnection;
+        }
+
+        private SqlConnection GetSqlConnection()
+        {
+            var sqlConnectionString = "Server=localhost;Database=Testbed;Trusted_Connection=True;";
+            var sqlConnection = new SqlConnection(sqlConnectionString);
+            sqlConnection.Open();
+            return sqlConnection;
         }
     }
 

@@ -27,7 +27,7 @@ namespace Linq2SqlEFCoreBehaviorsTest
             {
                 using (var context = new Linq2Sql.Linq2SqlDataContext(connection))
                 {
-                    
+                    context.Transaction = transaction;
                     context.Log = new DebugTextWriter();
                     action(context);
                 }
@@ -45,7 +45,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
             var options = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
             .EnableSensitiveDataLogging(true)
             .UseLoggerFactory(MyLoggerFactory)
-            .UseSqlCe(connection)
+            //.UseSqlCe(connection)
+            .UseSqlServer(connection)
             .Options;
             try
             {
