@@ -45,8 +45,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
             var options = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
             .EnableSensitiveDataLogging(true)
             .UseLoggerFactory(MyLoggerFactory)
-            //.UseSqlCe(connection)
-            .UseSqlServer(connection)
+            .UseSqlCe(connection)
+            //.UseSqlServer(connection)
             .Options;
             try
             {
