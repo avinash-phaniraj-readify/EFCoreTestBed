@@ -157,6 +157,7 @@
     <Compile Include="AttachTests\Scenario4.cs" />
     <Compile Include="MiscTests\NullableTypeInConstructor.cs" />
     <Compile Include="MiscTests\QueryableInSelectTest.cs" />
+    <Compile Include="MiscTests\IntermediateProjection.cs" />
     <Compile Include="MiscTests\SingleDoesNotThrowError.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="DatabaseFixture.cs" />
