@@ -2,8 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using System;
+using System.Collections.Generic;
 using System.Data.SqlServerCe;
 using System.Linq;
+using System.Diagnostics;
 
 namespace TestHost
 {
@@ -16,26 +18,22 @@ namespace TestHost
             ceConnection.Open();
 
             var options = new DbContextOptionsBuilder<TestDbContext>()
-                .UseSqlCe(ceConnection, x => x.UseRelationalNulls(true))
+                .UseSqlCe(ceConnection)
                 .UseLoggerFactory(MyLoggerFactory)
                 .Options;
 
             var context = new TestDbContext(options);
-            var employees = context.Set<Employee>();
-            var employeeDevices = context.Set<EmployeeDevice>();
 
-            Console.WriteLine("Generated Sql query for WHERE:");
-            var result1 = (from e in employees
-                           join ed in employeeDevices on e.Id equals ed.EmployeeId into x
-                           from y in x.DefaultIfEmpty()
-                           where y.EmployeeId != 0
-                           select y.Device).ToList();
+            var emp = new Employee { Id = 1, Name = "known employee" };
+            emp.Devices = new List<EmployeeDevice>();
+            context.Attach(emp);
 
-            Console.WriteLine("\nGenerated Sql query for SELECT:");
-            var result2 = (from e in employees
-                           join ed in employeeDevices on e.Id equals ed.EmployeeId into x
-                           from y in x.DefaultIfEmpty()
-                           select y.EmployeeId != 0 ? y.Device : "n/a").ToList();
+            var device = new EmployeeDevice { Id = 1, EmployeeId = 1, Device = "known device" };
+
+            emp.Devices.Add(device);
+            context.ChangeTracker.Entries();
+
+            Debug.Assert(context.Entry(device).State == EntityState.Unchanged);
 
             Console.ReadKey();
         }
