@@ -32,13 +32,6 @@ namespace TestHostInvalidCast.Tests
                     var result = context.InventoryPool.Sum(p => (decimal) p.Quantity);
                 });
             });
-
-            EFCoreSqlServer(context =>
-            {
-                context.InventoryPool.RemoveRange(context.InventoryPool);
-                context.SaveChanges();
-            });
         }
-
     }
 }
