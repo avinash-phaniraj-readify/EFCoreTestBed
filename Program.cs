@@ -1,39 +1,33 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Data.SqlServerCe;
+﻿using System.Data.SqlServerCe;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
-namespace TestHostForCastException
+namespace TestHostInvalidCast
 {
     class Program
     {
         static void Main(string[] args)
         {
             var ceConnectionString = "Data Source=TestDb.sdf; Persist Security Info = False; ";
-            var ceConnection = new SqlCeConnection(ceConnectionString);
-            ceConnection.Open();
+            using (var ceConnection = new SqlCeConnection(ceConnectionString))
+            {
+                ceConnection.Open();
 
-            var options = new DbContextOptionsBuilder<TestDataContext>()
-                .UseSqlCe(ceConnection)
-                .Options;
+                var options = ((DbContextOptionsBuilder)new DbContextOptionsBuilder<DataContext>()
+                    .UseSqlCe(ceConnection)).Options;
 
-            var context = new TestDataContext(options);
-            var es = context.Set<Employee>();
-            var ds = context.Set<EmployeeDevice>();
-
-            var q = (from e in es
-                join d in ds on e.Id equals d.EmployeeId into x
-                from j in x.DefaultIfEmpty()
-                select new Holder
+                using (var context = new DataContext(options))
                 {
-                    Name = e.Name,
-                    DeviceId = j.DeviceId //(short?)
-                }).ToList();
-        }
-    }
+                    context.InventoryPool.Add(new InventoryPool
+                    {
+                        ActualCost = 1,
+                        Quantity = 2,
+                    });
+                    context.SaveChanges();
 
-    public class Holder
-    {
-        public string Name { get; set; }
-        public int? DeviceId { get; set; }
+                    var result = context.InventoryPool.Sum(p => (decimal)p.Quantity * p.ActualCost);
+                }
+            }
+        }
     }
 }
