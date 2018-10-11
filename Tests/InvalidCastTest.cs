@@ -15,14 +15,6 @@ namespace TestHostInvalidCast.Tests
         {
             EFCoreSqlCe(context =>
             {
-                try
-                {
-                    var result = context.Set<InventoryPool>().Sum(p => (decimal)p.Quantity);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine(ex);
-                }
                 Assert.Throws<InvalidOperationException>(() =>
                 {
                     var result = context.Set<InventoryPool>().Sum(p => (decimal)p.Quantity);
