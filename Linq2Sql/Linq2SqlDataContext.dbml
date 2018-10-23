@@ -1,18 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?><Database Name="FruitCake" Class="Linq2SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=FruitCake;Integrated Security=True" SettingsObjectName="Linq2SqlEFCoreBehaviorsTest.Properties.Settings" SettingsPropertyName="FruitCakeConnectionString" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Employee" Member="Employees">
-    <Type Name="Employee">
-      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
-      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
-      <Association Name="Employee_EmployeeDevice" Member="EmployeeDevices" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeDevice" />
-      <Association Name="Employee_EmployeeDetail" Member="EmployeeDetails" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeDetail" Cardinality="One" />
-    </Type>
-  </Table>
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TestBed" Class="Linq2SqlDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=localhost;Initial Catalog=TestBed;Integrated Security=True" SettingsObjectName="Linq2SqlEFCoreBehaviorsTest.Properties.Settings" SettingsPropertyName="FruitCakeConnectionString" Provider="System.Data.SqlClient" />
   <Table Name="dbo.EmployeeDevice" Member="EmployeeDevices">
     <Type Name="EmployeeDevice">
       <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Device" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="DeviceId" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="Employee_EmployeeDevice" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
     </Type>
   </Table>
@@ -22,6 +15,15 @@
       <Column Name="EmployeeId" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Column Name="Details" Type="System.String" DbType="NVarChar(100) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
       <Association Name="Employee_EmployeeDetail" Member="Employee" ThisKey="EmployeeId" OtherKey="Id" Type="Employee" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Employee" Member="Employees">
+    <Type Name="Employee">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Created" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Association Name="Employee_EmployeeDevice" Member="EmployeeDevices" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeDevice" />
+      <Association Name="Employee_EmployeeDetail" Member="EmployeeDetails" ThisKey="Id" OtherKey="EmployeeId" Type="EmployeeDetail" Cardinality="One" />
     </Type>
   </Table>
 </Database>

@@ -5,6 +5,7 @@ using System;
 using System.Data;
 using System.Text;
 using Xunit;
+using SqlConnection = System.Data.SqlClient.SqlConnection;
 
 namespace Linq2SqlEFCoreBehaviorsTest
 {
@@ -41,13 +42,20 @@ namespace Linq2SqlEFCoreBehaviorsTest
         protected void EFContext(Action<EFCore.EFCoreDataContext> action)
         {
             var connection = this.fixture.Connection;
-            var transaction = connection.BeginTransaction();
-            var options = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
+            //var transaction = connection.BeginTransaction();
+            var builder = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
             .EnableSensitiveDataLogging(true)
-            .UseLoggerFactory(MyLoggerFactory)
-            .UseSqlCe(connection)
-            //.UseSqlServer(connection)
-            .Options;
+            .UseLoggerFactory(MyLoggerFactory);
+
+            if (connection is SqlConnection)
+            {
+                builder = builder.UseSqlServer(connection);
+            } else
+            {
+                builder = builder.UseSqlCe(connection);
+            }
+
+            var options = builder.Options;
             try
             {
                 using (var context = new EFCore.EFCoreDataContext(options))
@@ -57,7 +65,7 @@ namespace Linq2SqlEFCoreBehaviorsTest
             }
             finally
             {
-                transaction.Rollback();
+                //transaction.Rollback();
             }
         }
 

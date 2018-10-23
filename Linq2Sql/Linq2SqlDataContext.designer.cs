@@ -22,7 +22,7 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 	using System;
 	
 	
-	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="FruitCake")]
+	[global::System.Data.Linq.Mapping.DatabaseAttribute(Name="TestBed")]
 	public partial class Linq2SqlDataContext : System.Data.Linq.DataContext
 	{
 		
@@ -30,15 +30,15 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 		
     #region Extensibility Method Definitions
     partial void OnCreated();
-    partial void InsertEmployee(Employee instance);
-    partial void UpdateEmployee(Employee instance);
-    partial void DeleteEmployee(Employee instance);
     partial void InsertEmployeeDevice(EmployeeDevice instance);
     partial void UpdateEmployeeDevice(EmployeeDevice instance);
     partial void DeleteEmployeeDevice(EmployeeDevice instance);
     partial void InsertEmployeeDetail(EmployeeDetail instance);
     partial void UpdateEmployeeDetail(EmployeeDetail instance);
     partial void DeleteEmployeeDetail(EmployeeDetail instance);
+    partial void InsertEmployee(Employee instance);
+    partial void UpdateEmployee(Employee instance);
+    partial void DeleteEmployee(Employee instance);
     #endregion
 		
 		public Linq2SqlDataContext() : 
@@ -71,14 +71,6 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Employee> Employees
-		{
-			get
-			{
-				return this.GetTable<Employee>();
-			}
-		}
-		
 		public System.Data.Linq.Table<EmployeeDevice> EmployeeDevices
 		{
 			get
@@ -94,151 +86,13 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 				return this.GetTable<EmployeeDetail>();
 			}
 		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="Employee")]
-	public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
-	{
 		
-		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-		
-		private int _Id;
-		
-		private string _Name;
-		
-		private EntitySet<EmployeeDevice> _EmployeeDevices;
-		
-		private EntityRef<EmployeeDetail> _EmployeeDetails;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
-    partial void OnValidate(System.Data.Linq.ChangeAction action);
-    partial void OnCreated();
-    partial void OnIdChanging(int value);
-    partial void OnIdChanged();
-    partial void OnNameChanging(string value);
-    partial void OnNameChanged();
-    #endregion
-		
-		public Employee()
-		{
-			this._EmployeeDevices = new EntitySet<EmployeeDevice>(new Action<EmployeeDevice>(this.attach_EmployeeDevices), new Action<EmployeeDevice>(this.detach_EmployeeDevices));
-			this._EmployeeDetails = default(EntityRef<EmployeeDetail>);
-			OnCreated();
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
-		public int Id
+		public System.Data.Linq.Table<Employee> Employees
 		{
 			get
 			{
-				return this._Id;
+				return this.GetTable<Employee>();
 			}
-			set
-			{
-				if ((this._Id != value))
-				{
-					this.OnIdChanging(value);
-					this.SendPropertyChanging();
-					this._Id = value;
-					this.SendPropertyChanged("Id");
-					this.OnIdChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
-		public string Name
-		{
-			get
-			{
-				return this._Name;
-			}
-			set
-			{
-				if ((this._Name != value))
-				{
-					this.OnNameChanging(value);
-					this.SendPropertyChanging();
-					this._Name = value;
-					this.SendPropertyChanged("Name");
-					this.OnNameChanged();
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeDevice", Storage="_EmployeeDevices", ThisKey="Id", OtherKey="EmployeeId")]
-		public EntitySet<EmployeeDevice> EmployeeDevices
-		{
-			get
-			{
-				return this._EmployeeDevices;
-			}
-			set
-			{
-				this._EmployeeDevices.Assign(value);
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeDetail", Storage="_EmployeeDetails", ThisKey="Id", OtherKey="EmployeeId", IsUnique=true, IsForeignKey=false)]
-		public EmployeeDetail EmployeeDetails
-		{
-			get
-			{
-				return this._EmployeeDetails.Entity;
-			}
-			set
-			{
-				EmployeeDetail previousValue = this._EmployeeDetails.Entity;
-				if (((previousValue != value) 
-							|| (this._EmployeeDetails.HasLoadedOrAssignedValue == false)))
-				{
-					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._EmployeeDetails.Entity = null;
-						previousValue.Employee = null;
-					}
-					this._EmployeeDetails.Entity = value;
-					if ((value != null))
-					{
-						value.Employee = this;
-					}
-					this.SendPropertyChanged("EmployeeDetails");
-				}
-			}
-		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
-		
-		public event PropertyChangedEventHandler PropertyChanged;
-		
-		protected virtual void SendPropertyChanging()
-		{
-			if ((this.PropertyChanging != null))
-			{
-				this.PropertyChanging(this, emptyChangingEventArgs);
-			}
-		}
-		
-		protected virtual void SendPropertyChanged(String propertyName)
-		{
-			if ((this.PropertyChanged != null))
-			{
-				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-		
-		private void attach_EmployeeDevices(EmployeeDevice entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = this;
-		}
-		
-		private void detach_EmployeeDevices(EmployeeDevice entity)
-		{
-			this.SendPropertyChanging();
-			entity.Employee = null;
 		}
 	}
 	
@@ -254,6 +108,8 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 		
 		private string _Device;
 		
+		private short _DeviceId;
+		
 		private EntityRef<Employee> _Employee;
 		
     #region Extensibility Method Definitions
@@ -266,6 +122,8 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
     partial void OnEmployeeIdChanged();
     partial void OnDeviceChanging(string value);
     partial void OnDeviceChanged();
+    partial void OnDeviceIdChanging(short value);
+    partial void OnDeviceIdChanged();
     #endregion
 		
 		public EmployeeDevice()
@@ -334,6 +192,26 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 					this._Device = value;
 					this.SendPropertyChanged("Device");
 					this.OnDeviceChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_DeviceId", DbType="SmallInt NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public short DeviceId
+		{
+			get
+			{
+				return this._DeviceId;
+			}
+			set
+			{
+				if ((this._DeviceId != value))
+				{
+					this.OnDeviceIdChanging(value);
+					this.SendPropertyChanging();
+					this._DeviceId = value;
+					this.SendPropertyChanged("DeviceId");
+					this.OnDeviceIdChanged();
 				}
 			}
 		}
@@ -541,6 +419,176 @@ namespace Linq2SqlEFCoreBehaviorsTest.Linq2Sql
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="Employee")]
+	public partial class Employee : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private System.DateTime _Created;
+		
+		private EntitySet<EmployeeDevice> _EmployeeDevices;
+		
+		private EntityRef<EmployeeDetail> _EmployeeDetails;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnCreatedChanging(System.DateTime value);
+    partial void OnCreatedChanged();
+    #endregion
+		
+		public Employee()
+		{
+			this._EmployeeDevices = new EntitySet<EmployeeDevice>(new Action<EmployeeDevice>(this.attach_EmployeeDevices), new Action<EmployeeDevice>(this.detach_EmployeeDevices));
+			this._EmployeeDetails = default(EntityRef<EmployeeDetail>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false, UpdateCheck=UpdateCheck.Never)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Created", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
+		public System.DateTime Created
+		{
+			get
+			{
+				return this._Created;
+			}
+			set
+			{
+				if ((this._Created != value))
+				{
+					this.OnCreatedChanging(value);
+					this.SendPropertyChanging();
+					this._Created = value;
+					this.SendPropertyChanged("Created");
+					this.OnCreatedChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeDevice", Storage="_EmployeeDevices", ThisKey="Id", OtherKey="EmployeeId")]
+		public EntitySet<EmployeeDevice> EmployeeDevices
+		{
+			get
+			{
+				return this._EmployeeDevices;
+			}
+			set
+			{
+				this._EmployeeDevices.Assign(value);
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Employee_EmployeeDetail", Storage="_EmployeeDetails", ThisKey="Id", OtherKey="EmployeeId", IsUnique=true, IsForeignKey=false)]
+		public EmployeeDetail EmployeeDetails
+		{
+			get
+			{
+				return this._EmployeeDetails.Entity;
+			}
+			set
+			{
+				EmployeeDetail previousValue = this._EmployeeDetails.Entity;
+				if (((previousValue != value) 
+							|| (this._EmployeeDetails.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._EmployeeDetails.Entity = null;
+						previousValue.Employee = null;
+					}
+					this._EmployeeDetails.Entity = value;
+					if ((value != null))
+					{
+						value.Employee = this;
+					}
+					this.SendPropertyChanged("EmployeeDetails");
+				}
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_EmployeeDevices(EmployeeDevice entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = this;
+		}
+		
+		private void detach_EmployeeDevices(EmployeeDevice entity)
+		{
+			this.SendPropertyChanging();
+			entity.Employee = null;
 		}
 	}
 }

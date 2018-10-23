@@ -43,8 +43,8 @@ namespace Linq2SqlEFCoreBehaviorsTest.EFCore
         public int Id { get; set; }
         public string Name { get; set; }
 
-        [NotMapped]
-        public DateTime? YoDate { get; set; }
+        [Column("Created", TypeName = "datetime")]  // 
+        public DateTime Created { get; set; }
 
         public EmployeeDetails EmployeeDetails { get; set; }
 

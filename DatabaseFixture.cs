@@ -21,8 +21,8 @@ namespace Linq2SqlEFCoreBehaviorsTest
             {
                 dbStream.CopyTo(fileStream);
             }
-            connection = GetCeConnection();
-            //connection = GetSqlConnection();
+            //connection = GetCeConnection();
+            connection = GetSqlConnection();
         }
 
         public DbConnection Connection => connection;
