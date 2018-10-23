@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TestHost
 {
@@ -35,6 +36,9 @@ namespace TestHost
 
         public string Name { get; set; }
 
+        [Column(TypeName = "datetime")]
+        public DateTime Created { get; set; }
+
         public ICollection<EmployeeDevice> Devices { get; set; }
     }
 
@@ -50,7 +54,5 @@ namespace TestHost
         public string Device { get; set; }
 
         public Employee Employee { get; set; }
-
-        public DateTime? ExpiryDate { get; set; }
     }
 }
