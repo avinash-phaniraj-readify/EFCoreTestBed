@@ -3,12 +3,21 @@ using System.Data.SqlServerCe;
 using System.Linq;
 using Xunit;
 
-namespace Linq2SqlEFCoreBehaviorsTest.MiscTests
+namespace Linq2SqlEFCoreBehaviorsTest.ClientSideEvalTests
 {
-    public class AnyTests : TestBase
+    public class WhereTests : TestBase
     {
-        public AnyTests(DatabaseFixture fixture) : base(fixture)
+        public WhereTests(DatabaseFixture fixture) : base(fixture)
         {
+        }
+
+        [Fact]
+        public void EFCoreTest_AnyInWhereWorks()
+        {
+            base.EFContext(context =>
+            {
+                var result = context.Set<EFCore.Employee>().Where(x => x.Devices.Any(y => y.Device == "Laptop")).ToList();
+            });
         }
 
         [Fact]

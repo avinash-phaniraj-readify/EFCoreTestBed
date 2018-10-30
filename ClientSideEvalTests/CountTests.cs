@@ -2,7 +2,7 @@
 using System.Linq;
 using Xunit;
 
-namespace Linq2SqlEFCoreBehaviorsTest.MiscTests
+namespace Linq2SqlEFCoreBehaviorsTest.ClientSideEvalTests
 {
     public class CountTests : TestBase
     {
