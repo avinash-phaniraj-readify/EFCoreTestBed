@@ -49,10 +49,10 @@ namespace Linq2SqlEFCoreBehaviorsTest
 
             if (connection is SqlConnection)
             {
-                builder = builder.UseSqlServer(connection);
+                builder = builder.UseSqlServer(connection, c => c.UseRelationalNulls(true));
             } else
             {
-                builder = builder.UseSqlCe(connection);
+                builder = builder.UseSqlCe(connection, c=> c.UseRelationalNulls(true));
             }
 
             var options = builder.Options;

@@ -12,29 +12,6 @@ namespace Linq2SqlEFCoreBehaviorsTest.MiscTests
         }
 
         [Fact]
-        public void Linq2SqlTest()
-        {
-            base.Linq2SqlContext(context =>
-            {
-                var result = context.GetTable<Linq2Sql.Employee>()
-                    .Where(x => x.EmployeeDevices.Any(y => y.DeviceId == 3))
-                    .ToList();
-            });
-
-            /*
-            SELECT [t0].[Id], [t0].[Name], [t0].[Created]
-            FROM [Employee] AS [t0]
-            WHERE EXISTS(
-                SELECT NULL AS [EMPTY]
-                FROM [EmployeeDevice] AS [t1]
-                WHERE ([t1].[DeviceId] = @p0) AND ([t1].[EmployeeId] = [t0].[Id])
-                )
-            -- @p0: Input Int32 (Size = 0; Prec = 0; Scale = 0) [3]
-            -- Context: SqlProvider(SqlCE) Model: AttributedMetaModel Build: 4.7.3056.0 
-            */
-        }
-
-        [Fact]
         public void EFCoreTest_UnionWorksInMemory()
         {
             base.EFContext(context =>
@@ -202,23 +179,83 @@ namespace Linq2SqlEFCoreBehaviorsTest.MiscTests
         }
 
         [Fact]
-        public void EFCoreTest_CountPops()
+        public void EFCoreTest_CountInWherePops()
         {
             base.EFContext(context =>
             {
                 Assert.Throws<SqlCeException>(() =>
                 {
                     var result = context.Set<EFCore.Employee>().Where(x => x.Devices.Count() > 0).ToList();
-                });                
+                });
             });
         }
 
         [Fact]
-        public void EFCoreTest_DistinctWorksInMemory()
+        public void EFCoreTest_CoaleseceFirstOrDefaultInWhereWorks()
         {
             base.EFContext(context =>
             {
-                var result = context.Set<EFCore.Employee>().Distinct().ToList();
+                var result = context.Set<EFCore.Employee>().Where(x => x.Devices.FirstOrDefault().EmployeeId == 1).ToList();
+            });
+        }
+
+        [Fact]
+        public void Linq2SqlTest_CompareToEquals()
+        {
+            base.Linq2SqlContext(context =>
+            {
+                var name = "Michael";
+                var result = context.GetTable<Linq2Sql.Employee>().Where(x => x.Name.CompareTo(name) == 0).ToList();
+            });
+        }
+
+        [Fact]
+        public void EFCoreTest_CompareToEquals()
+        {
+            base.EFContext(context =>
+            {
+                var name = "Michael";
+                var result = context.Set<EFCore.Employee>().Where(x => x.Name.CompareTo(name) == 0).ToList();
+            });
+        }
+
+        [Fact]
+        public void Linq2SqlTest_CompareToGreaterThanEqualsTo()
+        {
+            base.Linq2SqlContext(context =>
+            {
+                var name = "Michael";
+                var result = context.GetTable<Linq2Sql.Employee>().Where(x => x.Name.CompareTo(name) >= 0).ToList();
+            });
+        }
+
+        [Fact]
+        public void EFCoreTest_CompareToGreaterThanEqualsTo()
+        {
+            base.EFContext(context =>
+            {
+                var name = "Michael";
+                var result = context.Set<EFCore.Employee>().Where(x => x.Name.CompareTo(name) >= 0).ToList();
+            });
+        }
+
+        [Fact]
+        public void Linq2SqlTest_CompareToLessThanEqualsTo()
+        {
+            base.Linq2SqlContext(context =>
+            {
+                var name = "Michael";
+                var result = context.GetTable<Linq2Sql.Employee>().Where(x => x.Name.CompareTo(name) <= 0).ToList();
+            });
+        }
+
+        [Fact]
+        public void EFCoreTest_CompareToLessThanEqualsTo()
+        {
+            base.EFContext(context =>
+            {
+                var name = "Michael";
+                var result = context.Set<EFCore.Employee>().Where(x => x.Name.CompareTo(name) <= 0).ToList();
             });
         }
     }
