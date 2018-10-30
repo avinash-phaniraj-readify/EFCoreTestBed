@@ -65,18 +65,6 @@ namespace Linq2SqlEFCoreBehaviorsTest.ClientSideEvalTests
         }
 
         [Fact]
-        public void EFCoreTest_FirstOrDefaultPops()
-        {
-            base.EFContext(context =>
-            {
-                Assert.Throws<SqlCeException>(() =>
-                {
-                    var result = context.Set<EFCore.Employee>().Where(x => x.Devices.FirstOrDefault() != null).ToList();
-                });
-            });
-        }
-
-        [Fact]
         public void EFCoreTest_FirstInWhereResultsInSelectNPlus1()
         {
             base.EFContext(context =>
