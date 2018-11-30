@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Debug;
 using System;
@@ -45,7 +46,10 @@ namespace Linq2SqlEFCoreBehaviorsTest
             //var transaction = connection.BeginTransaction();
             var builder = new DbContextOptionsBuilder<EFCore.EFCoreDataContext>()
             .EnableSensitiveDataLogging(true)
-            .UseLoggerFactory(MyLoggerFactory);
+            .UseLoggerFactory(MyLoggerFactory)
+             .ConfigureWarnings
+                                (warnings =>
+                                warnings.Throw(RelationalEventId.QueryClientEvaluationWarning));
 
             if (connection is SqlConnection)
             {
