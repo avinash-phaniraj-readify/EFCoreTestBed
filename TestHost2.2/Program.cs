@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data.SqlServerCe;
-using System.Linq;
 
-namespace TestHostForCastException
+namespace TestHost_2_2
 {
     class Program
     {
@@ -17,8 +16,9 @@ namespace TestHostForCastException
                 .Options;
 
             var context = new TestDataContext(options);
-            //context.Set<Employee>().ToList();
-            //context.Set<EmployeeDevice>().ToList();
+            var giraffe = new Giraffe { Name = "Bobby" };
+            context.Set<Giraffe>().Add(giraffe);
+            context.SaveChanges();
         }
     }
 }
